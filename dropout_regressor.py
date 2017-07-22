@@ -23,8 +23,8 @@ class DropoutRegressor (base_regressor.Regressor):
         self.params['learning_rate'] = 0.01
         self.params['num_iterations'] = 5000
         self.params['dropout'] = 0.2
-        self.params['num_neurons2'] = 10
-        self.params['num_neurons3'] = 8
+        self.params['num_neurons2'] = 4
+        self.params['num_neurons3'] = 4
         self.params['predicive_sample_size'] = 10
         self.input_var = theano.tensor.matrix('input_var')
         self.target_var = theano.tensor.vector('target_var')
@@ -97,12 +97,10 @@ class DropoutRegressor (base_regressor.Regressor):
         :param y:
         :param learning_intensity:
         """
-        X = np.array(x).astype(floatX)
-        Y = np.array(y).astype(floatX)
-        data = np.matrix(X).T
-        targets = np.array(Y)
+        x = np.matrix(x).astype(floatX)
+        y = np.array([y]).astype(floatX)
         for i in range(self.params['num_iterations']*learning_intensity):
-            self.symbolic_train_fn(data, targets)
+            self.train_function(x, y)
 
     def make_pred_in_one_point(self, X):
         # получает точку входного пространства
@@ -120,8 +118,9 @@ if __name__ == "__main__":
     import visualisator
     import matplotlib.pyplot as plt
     regressor = DropoutRegressor()
+    regressor.learn(0,0,25)
     plt.figure()
-    visualisator.draw_process(regressor, -5, 5, 3)
+    visualisator.draw_process(regressor, -1, 1, 20)
     plt.show()
 
 
