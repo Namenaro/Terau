@@ -30,6 +30,7 @@ class DropoutRegressor (base_regressor.Regressor):
         self.target_var = theano.tensor.vector('target_var')
         self.model = self.symbolic_droput_model()
         self.train_function = self.symbolic_train_fn()
+        self.N = 0
 
 
     def symbolic_droput_model(self):
@@ -101,6 +102,7 @@ class DropoutRegressor (base_regressor.Regressor):
         y = np.array([y]).astype(floatX)
         for i in range(self.params['num_iterations']*learning_intensity):
             self.train_function(x, y)
+        self.N += 1
 
     def make_pred_in_one_point(self, X):
         # получает точку входного пространства
@@ -118,7 +120,7 @@ if __name__ == "__main__":
     import visualisator
     import matplotlib.pyplot as plt
     regressor = DropoutRegressor()
-    regressor.learn(0,0,25)
+    regressor.learn(0.5,0.5,25)
     plt.figure()
     visualisator.draw_process(regressor, -1, 1, 20)
     plt.show()
