@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*
+import cPickle as pickle
+
 import theano
 import theano.tensor
 import data_generator
@@ -18,7 +20,7 @@ np.random.seed(42)
 rng = np.random.RandomState(0)
 
 class DropoutRegressor (base_regressor.Regressor):
-    def __init__(self):
+    def __init__(self, file_with_model=None):
         self.params = {}
         self.params['weight_decay'] = 0.00001
         self.params['learning_rate'] = 0.01
@@ -29,10 +31,16 @@ class DropoutRegressor (base_regressor.Regressor):
         self.params['predicive_sample_size'] = 10
         self.input_var = theano.tensor.matrix('input_var')
         self.target_var = theano.tensor.vector('target_var')
-        self.model = self.symbolic_droput_model()
+        if file_with_model is None:
+            self.model = self.symbolic_droput_model()
+        else:
+            self.restore_model_from_file(file_with_model)
         self.train_function = self.symbolic_train_fn()
-        self.N = 0
+        self.learnedX = []
+        self.learnedY = []
 
+    def get_N(self):
+        return len(self.learnedX)
 
     def symbolic_droput_model(self):
         input_layer = InputLayer(shape=(None, 1),
@@ -116,6 +124,14 @@ class DropoutRegressor (base_regressor.Regressor):
         output = f(X)
         return output
 
+    def save_model_to_file(self, filename):
+        my_dict = {'model': self.model, 'params': lasagne.layers.get_all_param_values(self.model)}
+        pickle.dump(my_dict, open(filename + ".pkl", "wb"))
+
+    def restore_model_from_file(self, filename):
+        my_dict = pickle.load(open(filename + ".pkl", "rb"))
+        self.model = my_dict['model']
+        lasagne.layers.set_all_param_values(self.model, my_dict['params'])
 
 if __name__ == "__main__":
     import visualisator

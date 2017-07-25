@@ -76,11 +76,11 @@ class DataSaver:
     @staticmethod
     def save_XY_to_file(X, Y, filename):
         my_dict = {'X': X, 'Y': Y}
-        pickle.dump(my_dict, open(filename + ".p", "wb"))
+        pickle.dump(my_dict, open(filename + ".pkl", "wb"))
 
     @staticmethod
     def get_XY_from_file(filename):
-        my_dict = pickle.load(open(filename + ".p", "rb"))
+        my_dict = pickle.load(open(filename + ".pkl", "rb"))
         return my_dict['X'], my_dict['Y']
 
 if __name__ == "__main__":
