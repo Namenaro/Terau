@@ -134,6 +134,10 @@ class DropoutRegressor (base_regressor.Regressor):
         self.model = my_dict['model']
         lasagne.layers.set_all_param_values(self.model, my_dict['params'])
 
+    def save_info_to_file(self, filename):
+        my_dict = {'model_params': self.params, 'learnedX': self.learnedX, 'learnedY':self.learnedY}
+        pickle.dump(my_dict, open(filename + ".pkl", "wb"))
+
 if __name__ == "__main__":
     import visualisator
     import matplotlib.pyplot as plt

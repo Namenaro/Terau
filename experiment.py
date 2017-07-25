@@ -14,21 +14,29 @@ def in_lab(name, experiment):
     experiment()
     os.chdir(oldpwd)
 
-def experiment():
+def experiment(): # сохранение датасета в картинку и в файл
     plt.figure()
     data = data_generator.AlexData(30)
     X, Y = data.get_batch(30)
     plt.scatter(X, Y, c='k', label='data', zorder=1)
     plt.savefig("dataset.png")
     data_generator.DataSaver.save_XY_to_file(X, Y, "dataset")
-    newX, newY = data_generator.DataSaver.get_XY_from_file("dataset")
-    plt.figure()
-    plt.scatter(newX, newY, c='r', label='data', zorder=1)
-    plt.savefig("dataset_restored.png")
+
+def experiment1():
+    dg = data_generator.AlexData(30)
+    model = dropout_regressor.DropoutRegressor()
+    for i in range(100):
+        X, Y = dg.get_batch(1)
+        x = X[0]
+        y = Y[0]
+        model.learn(x,y, 1)
+        if i%9 == 0:
+            model.save_info_to_file("info_"+str(i))
+            model.save_model_to_file("model"+str(i))
+
 
 if __name__ == "__main__":
-    name = "Test"
-    in_lab(name, experiment)
+    in_lab("experiment1", experiment)
     
 
 

@@ -2,9 +2,7 @@
 class Regressor:
     # интерфейс для модели регрессора
     def __init__(self):
-        self.wins_counter = 0
-        self.N = 0
-        self.name = "undefined"
+        pass
 
     def predict(self, x):
         """
