@@ -30,7 +30,8 @@ class Ensemble:
             print "err=" + str(err)
             intensities[key] = 1
         indexes = sorted(unsertainties, key=unsertainties.get)
-        intensities[indexes[0]] = 15
+        intensities[indexes[0]] = err*10
+        print "selected " + str(indexes[0])
         return intensities
 
 
@@ -54,7 +55,7 @@ if __name__ == "__main__":
             continue
         plt.figure()
         visualisator.draw_process(ensemble.units[0], -3, 3, 30)
-        plt.savefig("unit_0_" + str(i) + ".png")
+        plt.savefig("uniT_0_" + str(i) + ".png")
         plt.figure()
         visualisator.draw_process(ensemble.units[1], -3, 3, 30)
-        plt.savefig("unit_1_" + str(i) + ".png")
+        plt.savefig("uniT_1_" + str(i) + ".png")

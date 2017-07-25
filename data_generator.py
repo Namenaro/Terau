@@ -12,6 +12,7 @@ class AlexData:
     def __init__(self, size):
         self.X = []
         self.Y = []
+        self.size = size
         self.make_XY(size)
 
     def _make_Y(self, X, noise, koef=1):
@@ -29,14 +30,14 @@ class AlexData:
         return X
 
     def XY(self, num_samples):
-        n1 = int(num_samples / 2)
-        n2 = num_samples - n1
+        n1 = int(num_samples)
+        #n2 = num_samples - n1
         X1 = self._make_X(mu=0.0, sigma=0.3, n=n1)
-        X2 = self._make_X(mu=1.5, sigma=0.3, n=n2)
+        #X2 = self._make_X(mu=1.5, sigma=0.3, n=n2)
         Y1 = self._make_Y(X1, noise=0.0, koef=1)
-        Y2 = self._make_Y(X2, noise=0.00, koef=-0.5)
-        X = X1 + X2
-        Y = Y1 + Y2
+        #Y2 = self._make_Y(X2, noise=0.00, koef=-0.5)
+        X = X1
+        Y = Y1
         return X, Y
 
     def make_XY(self, num_samples):

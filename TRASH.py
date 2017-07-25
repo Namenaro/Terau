@@ -12,5 +12,5 @@ m = copy.copy(my)
 m[3]=77
 
 
-i = 56
-print i%10
+i = 56.7
+print (int)(i)

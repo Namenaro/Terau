@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*
 import theano
 import theano.tensor
+import data_generator
 
 floatX = theano.config.floatX
 
@@ -100,7 +101,7 @@ class DropoutRegressor (base_regressor.Regressor):
         """
         x = np.matrix(x).astype(floatX)
         y = np.array([y]).astype(floatX)
-        for i in range(self.params['num_iterations']*learning_intensity):
+        for i in range((int)(self.params['num_iterations']*learning_intensity)):
             self.train_function(x, y)
         self.N += 1
 
@@ -120,10 +121,17 @@ if __name__ == "__main__":
     import visualisator
     import matplotlib.pyplot as plt
     regressor = DropoutRegressor()
-    regressor.learn(0.5,0.5,25)
-    plt.figure()
-    visualisator.draw_process(regressor, -1, 1, 20)
-    plt.show()
+    data = data_generator.AlexData(30)
+    for i in range(82):
+        X, Y = data.get_batch(1)
+        x = X[0]
+        y = Y[0]
+        regressor.learn(x, y, 1)
+        if i % 9 != 0:
+            continue
+        plt.figure()
+        visualisator.draw_process(regressor, -3, 3, 30)
+        plt.savefig("G_" + str(i) + ".png")
 
 
 
