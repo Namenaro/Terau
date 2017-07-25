@@ -111,7 +111,8 @@ class DropoutRegressor (base_regressor.Regressor):
         y = np.array([y]).astype(floatX)
         for i in range((int)(self.params['num_iterations']*learning_intensity)):
             self.train_function(x, y)
-        self.N += 1
+        self.learnedX.append(x)
+        self.learnedY.append(y)
 
     def make_pred_in_one_point(self, X):
         # получает точку входного пространства
