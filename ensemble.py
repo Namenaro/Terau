@@ -20,7 +20,7 @@ class Ensemble:
         for key, unit in self.units.items():
             mean, var = unit.predict(x)
             predictive_means[key] = mean
-            unsertainties[key] = self._get_unsertainy(N=unit.N, variance=var)
+            unsertainties[key] = self._get_unsertainy(N=unit.get_N, variance=var)
         return predictive_means, unsertainties
 
     def get_intensities(self, y, predictive_means, unsertainties):
