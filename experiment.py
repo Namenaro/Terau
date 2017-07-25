@@ -20,12 +20,16 @@ def experiment():
     X, Y = data.get_batch(30)
     plt.scatter(X, Y, c='k', label='data', zorder=1)
     plt.savefig("dataset.png")
-    
+    data_generator.DataSaver.save_XY_to_file(X, Y, "dataset")
+    newX, newY = data_generator.DataSaver.get_XY_from_file("dataset")
+    plt.figure()
+    plt.scatter(newX, newY, c='r', label='data', zorder=1)
+    plt.savefig("dataset_restored.png")
+
 if __name__ == "__main__":
     name = "Test"
     in_lab(name, experiment)
-    name = "Test2"
-    in_lab(name, experiment)
+    
 
 
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*
-
+import cPickle as pickle
 import matplotlib.pyplot as plt
 import numpy as np
 np.random.seed(42)
@@ -71,6 +71,17 @@ class AlexData:
     def get_test_data(self, size):
         X, Y = self.XY(size)
         return X, Y
+
+class DataSaver:
+    @staticmethod
+    def save_XY_to_file(X, Y, filename):
+        my_dict = {'X': X, 'Y': Y}
+        pickle.dump(my_dict, open(filename + ".p", "wb"))
+
+    @staticmethod
+    def get_XY_from_file(filename):
+        my_dict = pickle.load(open(filename + ".p", "rb"))
+        return my_dict['X'], my_dict['Y']
 
 if __name__ == "__main__":
      data = AlexData(30)
