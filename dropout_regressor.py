@@ -16,18 +16,17 @@ from lasagne.objectives import squared_error
 import numpy as np
 
 import base_regressor
-np.random.seed(42)
-rng = np.random.RandomState(0)
+np.random.seed(43)
 
 class DropoutRegressor (base_regressor.Regressor):
     def __init__(self, file_with_model=None):
         self.params = {}
         self.params['weight_decay'] = 0.00001
         self.params['learning_rate'] = 0.01
-        self.params['num_iterations'] = 5000
+        self.params['num_iterations'] = 1000
         self.params['dropout'] = 0.2
-        self.params['num_neurons2'] = 4
-        self.params['num_neurons3'] = 4
+        self.params['num_neurons2'] = 14
+        self.params['num_neurons3'] = 8
         self.params['predicive_sample_size'] = 10
         self.input_var = theano.tensor.matrix('input_var')
         self.target_var = theano.tensor.vector('target_var')

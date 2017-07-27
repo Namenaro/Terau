@@ -2,7 +2,7 @@
 import cPickle as pickle
 import matplotlib.pyplot as plt
 import numpy as np
-np.random.seed(42)
+np.random.seed(43)
 
 # Класс отвечающий за датасет для регресии из 1д в 1д.
 # Класс инициализирует датасет
@@ -84,7 +84,7 @@ class DataSaver:
         return my_dict['X'], my_dict['Y']
 
 if __name__ == "__main__":
-     data = AlexData(30)
+     data = AlexData(10)
      data.show_XY()
      X,Y = data.get_batch(10)
      data.show_XY(X=X, Y=Y)
