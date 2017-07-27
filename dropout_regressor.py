@@ -107,6 +107,7 @@ class DropoutRegressor (base_regressor.Regressor):
         :param y:
         :param learning_intensity:
         """
+        print "next point...."
         x = np.matrix(x).astype(floatX)
         y = np.array([y]).astype(floatX)
         for i in range((int)(self.params['num_iterations']*learning_intensity)):
@@ -126,17 +127,24 @@ class DropoutRegressor (base_regressor.Regressor):
         return output
 
     def save_model_to_file(self, filename):
-        my_dict = {'model': self.model, 'params': lasagne.layers.get_all_param_values(self.model)}
+        my_dict = {'input_var': self.input_var, 'target_var': self.target_var, 'model': self.model, 'params': lasagne.layers.get_all_param_values(self.model)}
         pickle.dump(my_dict, open(filename + ".pkl", "wb"))
 
     def restore_model_from_file(self, filename):
         my_dict = pickle.load(open(filename + ".pkl", "rb"))
         self.model = my_dict['model']
+        self.input_var = my_dict['input_var']
+        self.target_var = my_dict['target_var']
         lasagne.layers.set_all_param_values(self.model, my_dict['params'])
 
     def save_info_to_file(self, filename):
         my_dict = {'model_params': self.params, 'learnedX': self.learnedX, 'learnedY':self.learnedY}
         pickle.dump(my_dict, open(filename + ".pkl", "wb"))
+
+    @staticmethod
+    def get_info_from_file(filename):
+        my_dict = pickle.load(open(filename + ".pkl", "rb"))
+        return my_dict['model_params'], my_dict['learnedX'], my_dict['learnedY']
 
 if __name__ == "__main__":
     import visualisator
