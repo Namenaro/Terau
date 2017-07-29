@@ -24,9 +24,9 @@ class DropoutRegressor (base_regressor.Regressor):
         self.params['weight_decay'] = 0.00001
         self.params['learning_rate'] = 0.01
         self.params['num_iterations'] = 1000
-        self.params['dropout'] = 0.2
-        self.params['num_neurons2'] = 14
-        self.params['num_neurons3'] = 8
+        self.params['dropout'] = 0.3
+        self.params['num_neurons2'] = 4
+        self.params['num_neurons3'] = 3
         self.params['predicive_sample_size'] = 10
         self.input_var = theano.tensor.matrix('input_var')
         self.target_var = theano.tensor.vector('target_var')
@@ -111,8 +111,19 @@ class DropoutRegressor (base_regressor.Regressor):
         y = np.array([y]).astype(floatX)
         for i in range((int)(self.params['num_iterations']*learning_intensity)):
             self.train_function(x, y)
+        self.add_to_memory(x, y)
+
+    def add_to_memory(self, x, y):
         self.learnedX.append(x)
         self.learnedY.append(y)
+
+    def learn_a(self, X, Y, learning_intensity):
+        X = np.array(X).astype(floatX)
+        Y = np.array(Y).astype(floatX)
+        X = np.matrix(X).T
+        Y = np.array(Y)
+        for i in range((int)(self.params['num_iterations']*learning_intensity)):
+            self.train_function(X, Y)
 
     def make_pred_in_one_point(self, X):
         # получает точку входного пространства
@@ -149,17 +160,15 @@ if __name__ == "__main__":
     import visualisator
     import matplotlib.pyplot as plt
     regressor = DropoutRegressor()
-    data = data_generator.AlexData(30)
-    for i in range(82):
-        X, Y = data.get_batch(1)
-        x = X[0]
-        y = Y[0]
-        regressor.learn(x, y, 1)
-        if i % 9 != 0:
-            continue
-        plt.figure()
-        visualisator.draw_process(regressor, -3, 3, 30)
-        plt.savefig("G_" + str(i) + ".png")
+
+
+    x = [0, 1]
+    y = [1, 2]
+    regressor.learn_a(x, y, 1)
+
+    plt.figure()
+    visualisator.draw_process(regressor, -3, 3, 30)
+    plt.savefig("G_"  + ".png")
 
 
 

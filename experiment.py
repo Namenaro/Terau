@@ -35,7 +35,7 @@ def experiment1():
     for i in range(num_points):
         x = X[i]
         y = Y[i]
-        model.learn(x,y, learning_intensity=5)
+        model.learn(x,y, learning_intensity=0.5)
     model_name = "model_1"
     info_name = "info_1"
     model.save_info_to_file(info_name)
@@ -44,7 +44,7 @@ def experiment1():
     for i in range(num_points):
         x = X[i]
         y = Y[i]
-        model.learn(x,y, learning_intensity=5)
+        model.learn(x,y, learning_intensity=0.5)
     model_name = "model_2"
     info_name = "info_2"
     model.save_info_to_file(info_name)
@@ -53,7 +53,7 @@ def experiment1():
     for i in range(num_points):
         x = X[i]
         y = Y[i]
-        model.learn(x,y, learning_intensity=5)
+        model.learn(x,y, learning_intensity=0.5)
 
     model_name = "model_3"
     info_name = "info_3"
@@ -66,15 +66,15 @@ def visualise_model(model_file, info_file):
     P, X, Y = dropout_regressor.DropoutRegressor.get_info_from_file(info_file)
     model = dropout_regressor.DropoutRegressor(file_with_model=model_file)
     plt.figure()
-    visualisator.draw_trajectory(model, from_=-1.5, to_=1.5, steps=20)
-    visualisator.draw_trajectory(model, from_=-1.5, to_=1.5, steps=20)
-    visualisator.draw_trajectory(model, from_=-1.5, to_=1.5, steps=20)
-    visualisator.draw_trajectory(model, from_=-1.5, to_=1.5, steps=20)
+    visualisator.draw_trajectory(model, from_=-1.5, to_=1.5, steps=15)
+    visualisator.draw_trajectory(model, from_=-1.5, to_=1.5, steps=15)
+    visualisator.draw_trajectory(model, from_=-1.5, to_=1.5, steps=15)
+    visualisator.draw_trajectory(model, from_=-1.5, to_=1.5, steps=15)
     plt.scatter(X, Y, c='r', label='real_data', zorder=1)
     plt.savefig(model_file + "Result.png")
 
 if __name__ == "__main__":
-    in_lab("experiment5", experiment1)
+    in_lab("experiment6", experiment1)
     
 
 
