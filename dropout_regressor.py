@@ -22,11 +22,11 @@ class DropoutRegressor (base_regressor.Regressor):
     def __init__(self, file_with_model=None):
         self.params = {}
         self.params['weight_decay'] = 0.00001
-        self.params['learning_rate'] = 0.01
-        self.params['num_iterations'] = 1000
-        self.params['dropout'] = 0.3
-        self.params['num_neurons2'] = 4
-        self.params['num_neurons3'] = 3
+        self.params['learning_rate'] = 0.02
+        self.params['num_iterations'] = 100
+        self.params['dropout'] = 0.2
+        self.params['num_neurons2'] = 20
+        self.params['num_neurons3'] = 20
         self.params['predicive_sample_size'] = 10
         self.input_var = theano.tensor.matrix('input_var')
         self.target_var = theano.tensor.vector('target_var')
@@ -48,21 +48,21 @@ class DropoutRegressor (base_regressor.Regressor):
 
         d2 = DenseLayer(incoming=input_layer,
                                   num_units=self.params['num_neurons2'],
-                                  nonlinearity=lasagne.nonlinearities.elu,
+                                  nonlinearity=lasagne.nonlinearities.very_leaky_rectify,
                                   name='second_layer')
 
         dr2 = lasagne.layers.DropoutLayer(d2, p=self.params['dropout'])
 
         d3 = DenseLayer(incoming=dr2,
                         num_units=self.params['num_neurons3'],
-                        nonlinearity=lasagne.nonlinearities.rectify,
+                        nonlinearity=lasagne.nonlinearities.leaky_rectify,
                         name='second_layer')
 
         dr3 = lasagne.layers.DropoutLayer(d3, p=self.params['dropout'])
 
         output_layer = DenseLayer(incoming=dr3,
                                   num_units=1,
-                                  nonlinearity=theano.tensor.tanh,
+                                  nonlinearity=lasagne.nonlinearities.identity,
                                   name='output_layer')
 
         return output_layer
@@ -77,10 +77,9 @@ class DropoutRegressor (base_regressor.Regressor):
 
         # какие параметры оптимизируем и как
         params = lasagne.layers.get_all_params(self.model, trainable=True)
-        updates = lasagne.updates.nesterov_momentum(
+        updates = lasagne.updates.adam(
             loss, params,
-            learning_rate=self.params['learning_rate'],
-            momentum=0.9)
+            learning_rate=self.params['learning_rate'])
         train_fn = theano.function(inputs=[self.input_var, self.target_var],
                                    outputs=loss,
                                    updates=updates,
@@ -164,6 +163,9 @@ if __name__ == "__main__":
 
     x = [0, 1]
     y = [1, 2]
+    regressor.learn_a(x, y, 1)
+    regressor.learn_a(x, y, 1)
+    regressor.learn_a(x, y, 1)
     regressor.learn_a(x, y, 1)
 
     plt.figure()

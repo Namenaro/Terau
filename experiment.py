@@ -73,8 +73,39 @@ def visualise_model(model_file, info_file):
     plt.scatter(X, Y, c='r', label='real_data', zorder=1)
     plt.savefig(model_file + "Result.png")
 
+def experiment2():
+    print "exp 2"
+    model = dropout_regressor.DropoutRegressor()
+    model_name = "model_0"
+    info_name = "info_0"
+    model.save_info_to_file(info_name)
+    model.save_model_to_file(model_name)
+    visualise_model(model_name, info_name)
+    x = [0, 1, 1.1, 1.3]
+    y = [-1, 2, 2.2, 2.3]
+    for _ in range(10):
+        x.append(1.3)
+        y.append(2.3)
+    model.learnedX = x
+    model.learnedY = y
+    model.learn_a(x, y, 10)
+
+    model_name = "model_1"
+    info_name = "info_1"
+    model.save_info_to_file(info_name)
+    model.save_model_to_file(model_name)
+    visualise_model(model_name, info_name)
+    model.learn_a(x, y, 2)
+    model_name = "model_2"
+    info_name = "info_2"
+    model.save_info_to_file(info_name)
+    model.save_model_to_file(model_name)
+    visualise_model(model_name, info_name)
+
+
+
 if __name__ == "__main__":
-    in_lab("experiment6", experiment1)
+    in_lab("experiment2", experiment2)
     
 
 
