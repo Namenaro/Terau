@@ -72,6 +72,11 @@ class AlexData:
         X, Y = self.XY(size)
         return X, Y
 
+def get_2_group():
+    X = [-0.6, -0.7, -0.8, -1,   0.5,  0.6,  0.65, 0.7, 0.75, 0.9]
+    Y = [ 0.1,  0.4, 0.5,  0.6,  -1,  -1.5,   -2, -2.5, -2.7, -3 ]
+    return X, Y
+
 class DataSaver:
     @staticmethod
     def save_XY_to_file(X, Y, filename):
@@ -86,5 +91,6 @@ class DataSaver:
 if __name__ == "__main__":
      data = AlexData(10)
      data.show_XY()
-     X,Y = data.get_batch(10)
+     #X,Y = data.get_batch(10)
+     X, Y = get_2_group()
      data.show_XY(X=X, Y=Y)
