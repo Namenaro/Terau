@@ -81,11 +81,7 @@ def experiment2():
     model.save_info_to_file(info_name)
     model.save_model_to_file(model_name)
     visualise_model(model_name, info_name)
-    x = [0, 1, 1.1, 1.3]
-    y = [-1, 2, 2.2, 2.3]
-    for _ in range(10):
-        x.append(1.3)
-        y.append(2.3)
+    x, y =data_generator.get_2_group()
     model.learnedX = x
     model.learnedY = y
     model.learn_a(x, y, 10)
@@ -105,7 +101,7 @@ def experiment2():
 
 
 if __name__ == "__main__":
-    in_lab("experiment2", experiment2)
+    in_lab("experiment3", experiment2)
     
 
 
