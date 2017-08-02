@@ -57,9 +57,16 @@ class PredictiveNode:
         # сколько тактов возраст ноды
         self.age = 0
 
+    def predict(self, x):
+        """
+        Скормить точку в модель и получить из нее предсказание и неуверенность
+        :param point: точка данных
+        :return: predictive_mean, predictive_var
+        """
+        ans, var = self.model.predict(x)
+        return ans, var
 
-
-    def f_useful_in_point(self, err, uns):
+    def _f_useful_in_point(self, err, uns):
 
         # err, unsertainty >= 0
 

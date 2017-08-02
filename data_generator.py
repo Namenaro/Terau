@@ -72,10 +72,21 @@ class AlexData:
         X, Y = self.XY(size)
         return X, Y
 
-def get_2_group():
-    X = [-0.6, -0.7, -0.8, -1,   0.5,  0.6,  0.65, 0.7, 0.75, 0.9]
-    Y = [ 0.1,  0.4, 0.5,  0.6,  -1,  -1.5,   -2, -2.5, -2.7, -3 ]
-    return X, Y
+
+class TwoGroups:
+    X = [-0.6, -0.7, -0.8, -1,  0.5, 0.6, 0.65, 0.7, 0.75, 0.9]
+    Y = [0.1,   0.4,  0.5, 0.6, -1,  -1.5, -2, -2.5, -2.7,  -3]
+
+    @staticmethod
+    def get_2_groups():
+        return TwoGroups.X, TwoGroups.Y
+
+    @staticmethod
+    def get_random_point():
+        N = len(TwoGroups.X)
+        index = np.random.choice(N)
+        return TwoGroups.X[index], TwoGroups.Y[index]
+
 
 class DataSaver:
     @staticmethod
@@ -92,5 +103,11 @@ if __name__ == "__main__":
      data = AlexData(10)
      data.show_XY()
      #X,Y = data.get_batch(10)
-     X, Y = get_2_group()
+     X, Y = TwoGroups.get_2_groups()
      data.show_XY(X=X, Y=Y)
+     x, y = TwoGroups.get_random_point()
+     print str(x) + ', '+ str(y)
+     x, y = TwoGroups.get_random_point()
+     print str(x) + ', ' + str(y)
+     x, y = TwoGroups.get_random_point()
+     print str(x) + ', ' + str(y)

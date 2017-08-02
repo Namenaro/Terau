@@ -63,15 +63,7 @@ def experiment1():
 
 
 def visualise_model(model_file, info_file):
-    P, X, Y = dropout_regressor.DropoutRegressor.get_info_from_file(info_file)
-    model = dropout_regressor.DropoutRegressor(file_with_model=model_file)
-    plt.figure()
-    visualisator.draw_trajectory(model, from_=-1.5, to_=1.5, steps=15)
-    visualisator.draw_trajectory(model, from_=-1.5, to_=1.5, steps=15)
-    visualisator.draw_trajectory(model, from_=-1.5, to_=1.5, steps=15)
-    visualisator.draw_trajectory(model, from_=-1.5, to_=1.5, steps=15)
-    plt.scatter(X, Y, c='r', label='real_data', zorder=1)
-    plt.savefig(model_file + "Result.png")
+    visualisator.visualize_dropout_regressor(model_file, info_file)
 
 def experiment2():
     print "exp 2"

@@ -5,57 +5,42 @@ import visualisator
 import matplotlib.pyplot as plt
 
 class Ensemble:
-    def __init__(self):
-        self.errors = []
-        self.units = {}
-        self.units[0] = dropout_regressor.DropoutRegressor()
-        self.units[1] = dropout_regressor.DropoutRegressor()
+    def __init__(self, max_size):
+        self.max_size = max_size
+        self.nodes = {}
 
-    def _get_unsertainy(self, N, variance):
-        return variance/float(N)
+    def save(self, damp_name):
+        for key, node in self.nodes.items():
+            model_name = "mod_" + str(key) + "_" + damp_name
+            info_name = "inf_" + str(key) + "_" + damp_name
+            node.model.save_info_to_file(info_name)
+            node.model.save_model_to_file(model_name)
+            visualisator.visualize_dropout_regressor(model_file=model_name, info_file=info_name)
 
-    def get_means_anses(self, x):
-        predictive_means = {}
+    def _get_errs_and_unserts_in_point(self, x, y):
+        predictive_errors = {}
         unsertainties = {}
-        for key, unit in self.units.items():
-            mean, var = unit.predict(x)
-            predictive_means[key] = mean
-            unsertainties[key] = self._get_unsertainy(N=unit.get_N, variance=var)
-        return predictive_means, unsertainties
+        for key, node in self.nodes.items():
+            mean, var = node.predict(x)
+            predictive_errors[key] = self.f_error(mean, y)
+            unsertainties[key] = var
+        return predictive_errors, unsertainties
 
-    def get_intensities(self, y, predictive_means, unsertainties):
-        intensities = {}
-        for key, unsertainty in unsertainties.items():
-            err = abs(y - predictive_means[key])
-            print "err=" + str(err)
-            intensities[key] = 1
-        indexes = sorted(unsertainties, key=unsertainties.get)
-        intensities[indexes[0]] = err*10
-        print "selected " + str(indexes[0])
-        return intensities
-
+    def f_error(self, target, prediction):
+        return (target - prediction) ^ 2
 
     def feed(self, x, y):
-        predictive_means, unsertainties = self.get_means_anses(x)
-        intensities = self.get_intensities(y, predictive_means, unsertainties)
-        for key, intensity in intensities.items():
-            self.units[key].learn(x, y, intensity)
+        errors, unsertainties = self._get_errs_and_unserts_in_point(x, y)
+
+
 
 
 
 if __name__ == "__main__":
-    data = data_generator.AlexData(30)
-    ensemble = Ensemble()
+    ensemble = Ensemble(max_size=4)
     for i in range(100):
-        X, Y = data.get_batch(1)
-        x=X[0]
-        y=Y[0]
+        x, y = data_generator.TwoGroups.get_random_point()
         ensemble.feed(x,y)
         if i%10 != 0:
             continue
-        plt.figure()
-        visualisator.draw_process(ensemble.units[0], -3, 3, 30)
-        plt.savefig("uniT_0_" + str(i) + ".png")
-        plt.figure()
-        visualisator.draw_process(ensemble.units[1], -3, 3, 30)
-        plt.savefig("uniT_1_" + str(i) + ".png")
+        ensemble.save("iter_" + str(i))
